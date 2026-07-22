@@ -4,8 +4,301 @@ name: DEMO-GOB-API
 meta:
   id: wrk_8706a5d298f345e29b71e4c94541bb42
   created: 1784691834414
-  modified: 1784691834414
-  description: ""
+  modified: 1784692000000
+  description: Endpoints locales para probar el backend demo SISCAT.
+collection:
+  - name: 00 - HEALTH
+    meta:
+      id: fld_0b22f67db4fd4c1cb751ab3c3f04bb2d
+      created: 1784692000001
+      modified: 1784692000001
+      sortKey: -1784692000001
+      description: Verificacion del servicio backend.
+    children:
+      - url: http://127.0.0.1:8081/api/health
+        name: HEALTH - API ONLINE
+        meta:
+          id: req_a30ccf26116d4df4b52781c8d0e5f241
+          created: 1784692000101
+          modified: 1784692000101
+          isPrivate: false
+          description: Confirma que el backend demo esta levantado.
+          sortKey: -1784692000101
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 01 - SISCAT BASE
+    meta:
+      id: fld_74fb0e710b554fb082df325a608a4718
+      created: 1784692000002
+      modified: 1784692000002
+      sortKey: -1784692000002
+      description: Datos iniciales usados por la pantalla principal y el header.
+    children:
+      - url: http://127.0.0.1:8081/api/session
+        name: SESSION - HEADER Y MODULOS
+        meta:
+          id: req_9ae5116d2ca44721aa598d89f92f14cc
+          created: 1784692000201
+          modified: 1784692000201
+          isPrivate: false
+          description: Devuelve establecimiento, usuario y modulos del inicio.
+          sortKey: -1784692000201
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://127.0.0.1:8081/api/catalog
+        name: CATALOG - INICIO FRONTEND
+        meta:
+          id: req_679ffdd9de3b45fe93d77a7bed7c1a46
+          created: 1784692000202
+          modified: 1784692000202
+          isPrivate: false
+          description: Endpoint principal para cargar establecimiento, modulos, UPSS y
+            servicios.
+          sortKey: -1784692000202
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 02 - CONSULTA EXTERNA
+    meta:
+      id: fld_1af2a97a74294c18b0207d06344a9e5d
+      created: 1784692000003
+      modified: 1784692000003
+      sortKey: -1784692000003
+      description: Arbol de servicios y detalles de Consulta Externa.
+    children:
+      - url: http://127.0.0.1:8081/api/services
+        name: SERVICES - LISTAR
+        meta:
+          id: req_a19a4a15a2f14f1bb1ed102ced61809b
+          created: 1784692000301
+          modified: 1784692000301
+          isPrivate: false
+          description: Lista Medicina, Enfermeria y Obstetricia con sus grupos.
+          sortKey: -1784692000301
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://127.0.0.1:8081/api/services/medicina/groups/infraestructura/items
+        name: ITEMS - MEDICINA INFRAESTRUCTURA
+        meta:
+          id: req_8535b23982cf45ff99d3a4aa4ee586b9
+          created: 1784692000302
+          modified: 1784692000302
+          isPrivate: false
+          description: Items de infraestructura para el servicio Medicina.
+          sortKey: -1784692000302
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://127.0.0.1:8081/api/services/enfermeria/groups/infraestructura/items
+        name: ITEMS - ENFERMERIA INFRAESTRUCTURA
+        meta:
+          id: req_8d28e8eff2214856bd5ef8cb78a15663
+          created: 1784692000303
+          modified: 1784692000303
+          isPrivate: false
+          description: Items de infraestructura para el servicio Enfermeria.
+          sortKey: -1784692000303
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://127.0.0.1:8081/api/items/topico-lavamanos
+        name: ITEM - TOPICO LAVAMANOS
+        meta:
+          id: req_3b72cf45013c4a60a9a89837a7c4bbfb
+          created: 1784692000304
+          modified: 1784692000304
+          isPrivate: false
+          description: Detalle que alimenta el panel derecho de evaluacion.
+          sortKey: -1784692000304
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 03 - CAPTURAS
+    meta:
+      id: fld_d9c026a8d8e84207a8a222935c50ebef
+      created: 1784692000004
+      modified: 1784692000004
+      sortKey: -1784692000004
+      description: Registro y consulta de evaluaciones del demo.
+    children:
+      - url: http://127.0.0.1:8081/api/captures
+        name: CAPTURES - LISTAR
+        meta:
+          id: req_5d7d0a60a35442038e146295bc38c901
+          created: 1784692000401
+          modified: 1784692000401
+          isPrivate: false
+          description: Lista capturas guardadas en storage local.
+          sortKey: -1784692000401
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://127.0.0.1:8081/api/captures
+        name: CAPTURES - CREAR JSON
+        meta:
+          id: req_2bc15595796b4148a6b52fbf0799fe0a
+          created: 1784692000402
+          modified: 1784692000402
+          isPrivate: false
+          description: Guarda una evaluacion demo del item Topico para procedimientos.
+          sortKey: -1784692000402
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "servicio": "Enfermeria",
+              "grupo": "Infraestructura",
+              "item_id": "topico-lavamanos",
+              "cumple": "NO APLICA",
+              "cantidad": 0,
+              "observacion": "Prueba desde Insomnia",
+              "recomendacion": "Validar flujo demo SISCAT"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            description: ""
+            disabled: false
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
@@ -17,5 +310,7 @@ environments:
   meta:
     id: env_287ae1fb7a441356273ad30da6d1a402f2765396
     created: 1784691834417
-    modified: 1784691834417
+    modified: 1784692000000
     isPrivate: false
+  data:
+    base_url: http://127.0.0.1:8081
