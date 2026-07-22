@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  title: DEMO-GOB SISCAT API
+  version: 1.0.0
+  description: Endpoints del backend demo para catalogo, servicios, items y capturas SISCAT.
+servers:
+  - url: http://127.0.0.1:8081
+    description: Docker local
+tags:
+  - name: Health
+  - name: Catalogo
+  - name: Capturas
+paths:
+  /api/health:
+    get:
+      tags: [Health]
+      summary: Verifica estado del backend
+      responses:
+        "200":
+          description: Backend disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /api/session:
+    get:
+      tags: [Catalogo]
+      summary: Obtiene establecimiento, usuario y modulos
+      responses:
+        "200":
+          description: Datos de sesion demo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  establishment:
+                    $ref: "#/components/schemas/Establishment"
+                  user:
+                    $ref: "#/components/schemas/User"
+                  modules:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Module"
+  /api/catalog:
+    get:
+      tags: [Catalogo]
+      summary: Obtiene todo el catalogo inicial
+      responses:
+        "200":
+          description: Catalogo SISCAT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  establishment:
+                    $ref: "#/components/schemas/Establishment"
+                  modules:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Module"
+                  upss:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Upss"
+                  services:
+                    type: object
+  /api/services:
+    get:
+      tags: [Catalogo]
+      summary: Lista servicios de Consulta Externa
+      responses:
+        "200":
+          description: Servicios disponibles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: object
+  /api/services/{servicio}/groups/{grupo}/items:
+    get:
+      tags: [Catalogo]
+      summary: Lista items por servicio y grupo
+      parameters:
+        - name: servicio
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [medicina, enfermeria, obstetricia]
+          example: medicina
+        - name: grupo
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [infraestructura, equipamiento, rrhh]
+          example: infraestructura
+      responses:
+        "200":
+          description: Items del grupo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Item"
+        "404":
+          description: Servicio o grupo no encontrado
+  /api/items/{item}:
+    get:
+      tags: [Catalogo]
+      summary: Obtiene detalle de un item
+      parameters:
+        - name: item
+          in: path
+          required: true
+          schema:
+            type: string
+          example: topico-lavamanos
+      responses:
+        "200":
+          description: Item encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: "#/components/schemas/ItemDetail"
+        "404":
+          description: Item no encontrado
+  /api/captures:
+    get:
+      tags: [Capturas]
+      summary: Lista capturas registradas
+      responses:
+        "200":
+          description: Capturas guardadas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  captures:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Capture"
+    post:
+      tags: [Capturas]
+      summary: Registra una captura demo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaptureRequest"
+            examples:
+              cumple:
+                value:
+                  servicio: Enfermeria
+                  grupo: Infraestructura
+                  item_id: topico-lavamanos
+                  cumple: NO APLICA
+                  cantidad: 0
+                  observacion: Prueba desde Insomnia
+                  recomendacion: Validar flujo demo
+      responses:
+        "201":
+          description: Captura creada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capture:
+                    $ref: "#/components/schemas/Capture"
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        service:
+          type: string
+          example: demo-gob-backend
+        time:
+          type: string
+          format: date-time
+    Establishment:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        network:
+          type: string
+        micro_network:
+          type: string
+        category:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        expires:
+          type: string
+          format: date
+    Module:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        href:
+          type: string
+    Upss:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        required:
+          type: string
+        detail:
+          type: string
+        default_qty:
+          type: integer
+    ItemDetail:
+      allOf:
+        - $ref: "#/components/schemas/Item"
+        - type: object
+          properties:
+            service_key:
+              type: string
+            service:
+              type: string
+            group_key:
+              type: string
+            group:
+              type: string
+    CaptureRequest:
+      type: object
+      properties:
+        servicio:
+          type: string
+        grupo:
+          type: string
+        item_id:
+          type: string
+        cumple:
+          type: string
+          enum: [SI, NO, NO APLICA]
+        cantidad:
+          type: integer
+        observacion:
+          type: string
+        recomendacion:
+          type: string
+    Capture:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        establishment_id:
+          type: string
+        data:
+          type: object
+        files:
+          type: array
+          items:
+            type: object
