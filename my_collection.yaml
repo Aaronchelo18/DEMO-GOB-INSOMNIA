@@ -344,16 +344,16 @@ collection:
               value: SI
               disabled: false
             - name: cantidad
-              value: "2"
+              value: "0"
               disabled: false
             - name: cantidad_existente
-              value: "2"
+              value: "0"
               disabled: false
             - name: cantidad_operativa
-              value: "1"
+              value: "0"
               disabled: false
             - name: cantidad_inoperativa
-              value: "1"
+              value: "0"
               disabled: false
             - name: estado
               value: ""
