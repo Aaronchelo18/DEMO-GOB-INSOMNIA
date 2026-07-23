@@ -227,16 +227,16 @@ collection:
       created: 1784692000004
       modified: 1784692000004
       sortKey: -1784692000004
-      description: Registro y consulta de evaluaciones del demo.
+      description: Registro, consulta, previsualizacion y eliminacion de informes capturados.
     children:
-      - url: http://127.0.0.1:8081/api/captures
-        name: CAPTURES - LISTAR
+      - url: "{{ _.base_url }}/api/captures"
+        name: CAPTURES - LISTAR INFORMES
         meta:
           id: req_5d7d0a60a35442038e146295bc38c901
           created: 1784692000401
           modified: 1784692000401
           isPrivate: false
-          description: Lista capturas guardadas en storage local.
+          description: "Lista todos los informes guardados. Al iniciar limpio debe devolver captures: []."
           sortKey: -1784692000401
         method: GET
         headers:
@@ -256,33 +256,198 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: http://127.0.0.1:8081/api/captures
-        name: CAPTURES - CREAR JSON
+      - url: "{{ _.base_url }}/api/captures"
+        name: CAPTURES - GUARDAR SIN ARCHIVO
         meta:
           id: req_2bc15595796b4148a6b52fbf0799fe0a
           created: 1784692000402
           modified: 1784692000402
           isPrivate: false
-          description: Guarda una evaluacion demo del item Topico para procedimientos.
+          description: Guarda solo datos del informe, sin archivo adjunto. Usar valores reales antes de enviar.
           sortKey: -1784692000402
         method: POST
         body:
           mimeType: application/json
           text: |-
             {
-              "servicio": "Enfermeria",
-              "grupo": "Infraestructura",
-              "item_id": "topico-lavamanos",
-              "cumple": "NO APLICA",
+              "upss": "CONSULTA EXTERNA",
+              "servicio": "",
+              "componente": "",
+              "grupo": "",
+              "tipo_registro": "equipment",
+              "item_id": "",
+              "item": "",
+              "detalle": "",
+              "cumple": "SI",
               "cantidad": 0,
-              "observacion": "Prueba desde Insomnia",
-              "recomendacion": "Validar flujo demo SISCAT"
+              "observacion": ""
             }
         headers:
           - name: Content-Type
             value: application/json
             description: ""
             disabled: false
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/captures"
+        name: CAPTURES - GUARDAR CON ARCHIVO
+        meta:
+          id: req_e6d3717a87e64f2c924bc08d258f6760
+          created: 1784692000403
+          modified: 1784692000403
+          isPrivate: false
+          description: Guarda datos del informe junto con PDF o imagenes. Este es el flujo que usa el frontend.
+          sortKey: -1784692000403
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: upss
+              value: CONSULTA EXTERNA
+              disabled: false
+            - name: servicio
+              value: ""
+              disabled: false
+            - name: componente
+              value: ""
+              disabled: false
+            - name: grupo
+              value: ""
+              disabled: false
+            - name: tipo_registro
+              value: equipment
+              disabled: false
+            - name: item_id
+              value: ""
+              disabled: false
+            - name: item
+              value: ""
+              disabled: false
+            - name: detalle
+              value: ""
+              disabled: false
+            - name: cumple
+              value: SI
+              disabled: false
+            - name: cantidad
+              value: "2"
+              disabled: false
+            - name: cantidad_existente
+              value: "2"
+              disabled: false
+            - name: cantidad_operativa
+              value: "1"
+              disabled: false
+            - name: cantidad_inoperativa
+              value: "1"
+              disabled: false
+            - name: estado
+              value: ""
+              disabled: false
+            - name: observacion
+              value: ""
+              disabled: false
+            - name: file[]
+              value: ""
+              type: file
+              fileName: ""
+              disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/captures/reemplazar-por-capture-id"
+        name: CAPTURES - ELIMINAR INFORME
+        meta:
+          id: req_0d954a0de1df44cf9a3abdfd8b96f801
+          created: 1784692000404
+          modified: 1784692000404
+          isPrivate: false
+          description: "Elimina un informe completo usando el id de la captura. Ejemplo de id: cap_121f980b2d532cdb."
+          sortKey: -1784692000404
+        method: DELETE
+        headers:
+          - name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/uploads/reemplazar-por-stored-name"
+        name: UPLOADS - PREVISUALIZAR ARCHIVO
+        meta:
+          id: req_4890cce28b4d4f459de62710ca658886
+          created: 1784692000404
+          modified: 1784692000404
+          isPrivate: false
+          description: Abre un archivo cargado usando el stored_name devuelto por POST /api/captures o GET /api/captures.
+          sortKey: -1784692000404
+        method: GET
+        headers:
+          - name: Accept
+            value: application/pdf,image/*,*/*
+            description: ""
+            disabled: false
+          - name: User-Agent
+            value: insomnia/13.0.1
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/uploads/reemplazar-por-stored-name"
+        name: UPLOADS - ELIMINAR ARCHIVO
+        meta:
+          id: req_8577265420b24d8e9d78cd5d035c8c34
+          created: 1784692000405
+          modified: 1784692000405
+          isPrivate: false
+          description: Elimina un archivo cargado usando el stored_name real. No usar sin confirmar el archivo.
+          sortKey: -1784692000405
+        method: DELETE
+        headers:
           - name: Accept
             value: application/json
             description: ""

@@ -23,6 +23,17 @@ Repositorio para los endpoints del backend DEMO-GOB/SISCAT.
 - `GET /api/items/topico-lavamanos`
 - `GET /api/captures`
 - `POST /api/captures`
+- `DELETE /api/captures/{id}`
+- `GET /api/uploads/{archivo}`
+- `DELETE /api/uploads/{archivo}`
+
+## Captures
+
+- `GET /api/captures`: lista los informes guardados. Si la data esta limpia devuelve `captures: []`.
+- `POST /api/captures`: guarda un informe. Puede recibir JSON sin archivo o `multipart/form-data` con fotos/PDF.
+- `DELETE /api/captures/{id}`: elimina un informe completo usando el `id`, por ejemplo `cap_121f980b2d532cdb`.
+- `GET /api/uploads/{archivo}`: previsualiza un archivo guardado usando el `stored_name`.
+- `DELETE /api/uploads/{archivo}`: elimina un archivo guardado usando el `stored_name`.
 
 ## Backend local
 

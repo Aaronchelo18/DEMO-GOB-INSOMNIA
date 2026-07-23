@@ -154,7 +154,7 @@ paths:
                       $ref: "#/components/schemas/Capture"
     post:
       tags: [Capturas]
-      summary: Registra una captura demo
+      summary: Registra un informe capturado
       requestBody:
         required: true
         content:
@@ -162,15 +162,30 @@ paths:
             schema:
               $ref: "#/components/schemas/CaptureRequest"
             examples:
-              cumple:
+              informe:
                 value:
-                  servicio: Enfermeria
-                  grupo: Infraestructura
-                  item_id: topico-lavamanos
-                  cumple: NO APLICA
+                  upss: CONSULTA EXTERNA
+                  servicio: ""
+                  componente: ""
+                  grupo: ""
+                  tipo_registro: equipment
+                  item_id: ""
+                  item: ""
+                  detalle: ""
+                  cumple: SI
                   cantidad: 0
-                  observacion: Prueba desde Insomnia
-                  recomendacion: Validar flujo demo
+                  observacion: ""
+          multipart/form-data:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/CaptureRequest"
+                - type: object
+                  properties:
+                    "file[]":
+                      type: array
+                      items:
+                        type: string
+                        format: binary
       responses:
         "201":
           description: Captura creada
@@ -181,6 +196,88 @@ paths:
                 properties:
                   capture:
                     $ref: "#/components/schemas/Capture"
+  /api/captures/{id}:
+    delete:
+      tags: [Capturas]
+      summary: Elimina un informe capturado
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: cap_121f980b2d532cdb
+      responses:
+        "200":
+          description: Informe eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capture:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      deleted:
+                        type: boolean
+                      files_deleted:
+                        type: integer
+        "404":
+          description: Informe no encontrado
+  /api/uploads/{archivo}:
+    get:
+      tags: [Capturas]
+      summary: Obtiene un archivo cargado
+      parameters:
+        - name: archivo
+          in: path
+          required: true
+          schema:
+            type: string
+          example: reemplazar-por-stored-name
+      responses:
+        "200":
+          description: Archivo encontrado
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            image/*:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Archivo no encontrado
+    delete:
+      tags: [Capturas]
+      summary: Elimina un archivo cargado
+      parameters:
+        - name: archivo
+          in: path
+          required: true
+          schema:
+            type: string
+          example: reemplazar-por-stored-name
+      responses:
+        "200":
+          description: Archivo eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: object
+                    properties:
+                      stored_name:
+                        type: string
+                      deleted:
+                        type: boolean
+        "404":
+          description: Archivo no encontrado
 components:
   schemas:
     HealthResponse:
@@ -263,20 +360,40 @@ components:
     CaptureRequest:
       type: object
       properties:
+        upss:
+          type: string
+          example: CONSULTA EXTERNA
         servicio:
+          type: string
+        componente:
           type: string
         grupo:
           type: string
+        tipo_registro:
+          type: string
+          enum: [equipment, staff, compliance]
         item_id:
+          type: string
+        item:
+          type: string
+        detalle:
           type: string
         cumple:
           type: string
           enum: [SI, NO, NO APLICA]
         cantidad:
           type: integer
-        observacion:
+        cantidad_existente:
+          type: integer
+        cantidad_operativa:
+          type: integer
+        cantidad_inoperativa:
+          type: integer
+        modelo:
           type: string
-        recomendacion:
+        estado:
+          type: string
+        observacion:
           type: string
     Capture:
       type: object
@@ -293,4 +410,21 @@ components:
         files:
           type: array
           items:
-            type: object
+            $ref: "#/components/schemas/CaptureFile"
+    CaptureFile:
+      type: object
+      properties:
+        name:
+          type: string
+        stored_name:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+        status:
+          type: string
+          example: Cargado
+        url:
+          type: string
+          example: /api/uploads/reemplazar-por-stored-name
